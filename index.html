@@ -4,306 +4,395 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ATOMVERSE — Explore Chemistry</title>
+<meta name="description" content="Explore all 118 chemical elements with ATOMVERSE, created by Abhijeet.">
+<title>ATOMVERSE | Explore the Elements</title>
 <style>
-:root {
-  --bg: #0e1724;
-  --panel: #152235;
-  --panel2: #1b2a3e;
-  --text: #e6edf5;
-  --muted: #9aabc0;
-  --accent: #a8c7e8;
-  --border: #2a3b50;
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Inter, "Segoe UI", Arial, sans-serif;
-  line-height: 1.6;
-}
-button, input { font: inherit; }
-button { cursor: pointer; }
-header {
-  padding: 20px 6%;
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 16px; flex-wrap: wrap;
-}
-.brand { font-size: 23px; letter-spacing: 5px; font-weight: 650; }
-.brand small { display:block; font-size:9px; letter-spacing:3px; color:var(--muted); }
-nav { display:flex; gap:8px; flex-wrap:wrap; }
-nav button, .btn {
-  border:1px solid var(--border); background:var(--panel);
-  color:var(--text); padding:9px 14px; border-radius:10px;
-}
-nav button:hover, .btn:hover { background:var(--panel2); }
-main { max-width:1200px; margin:auto; padding:30px 20px 60px; }
-.hero {
-  padding:35px; border:1px solid var(--border); border-radius:20px;
-  background:linear-gradient(120deg,#1a2b40,#111c2b 70%);
-  margin-bottom:24px;
-}
-.eyebrow { color:var(--accent); letter-spacing:3px; font-size:11px; }
-h1 { font-size:clamp(32px,5vw,54px); line-height:1.12; margin:14px 0; }
-p { color:var(--muted); }
-.hero p { max-width:600px; }
-.section {
-  background:var(--panel); border:1px solid var(--border);
-  border-radius:17px; padding:23px; margin:22px 0;
-}
-.section-head {
-  display:flex; align-items:center; justify-content:space-between;
-  gap:12px; flex-wrap:wrap; margin-bottom:18px;
-}
-h2 { font-size:22px; margin:0; }
-.search {
-  background:var(--bg); color:var(--text); border:1px solid var(--border);
-  padding:11px 14px; border-radius:10px; width:min(100%,260px);
-}
-.elements {
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(90px,1fr)); gap:9px;
-}
-.element {
-  min-height:105px; border:1px solid var(--border); border-radius:11px;
-  background:#1b2b3e; color:var(--text); padding:10px;
-  text-align:left; transition:transform .15s,border-color .15s;
-}
-.element:hover { transform:translateY(-2px); border-color:#8ba9c8; }
-.element .num { display:block; font-size:11px; color:var(--muted); }
-.element .symbol { display:block; font-size:26px; font-weight:650; }
-.element .name { display:block; font-size:12px; overflow-wrap:anywhere; }
-.element.selected { border-color:var(--accent); background:#263b52; }
-.content-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
-.atom-wrap {
-  min-height:275px; display:grid; place-items:center; overflow:hidden;
-  background:#111c2a; border-radius:14px;
-}
-.atom { width:210px; height:210px; position:relative; }
-.orbit {
-  position:absolute; inset:30px 0; border:1px solid #6d91b2;
-  border-radius:50%; transform:rotate(35deg);
-}
-.orbit.two { transform:rotate(-35deg); inset:30px 0; }
-.orbit.three { transform:rotate(90deg); inset:30px 0; }
-.nucleus {
-  position:absolute; width:48px; height:48px; top:81px; left:81px;
-  border-radius:50%; background:#769cbd;
-  box-shadow:inset -8px -8px 12px #304c68, 0 0 18px #769cbd33;
-}
-.electron {
-  width:10px; height:10px; border-radius:50%; background:#b8d8f3;
-  position:absolute; top:-5px; left:calc(50% - 5px);
-  box-shadow:0 0 8px #a8c7e855;
-}
-.spin { position:absolute; inset:0; animation:spin 7s linear infinite; }
-.spin.reverse { animation-direction:reverse; animation-duration:10s; }
-@keyframes spin { to { transform:rotate(360deg); } }
-.facts { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; }
-.fact { background:var(--panel2); border-radius:10px; padding:13px; }
-.fact small { display:block; color:var(--muted); }
-.fact strong { font-size:19px; }
-.detail-symbol { font-size:54px; line-height:1.2; color:var(--accent); }
-.tools { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-.tool {
-  border:1px solid var(--border); border-radius:12px; padding:18px;
-  background:#18263a;
-}
-.tool b { display:block; margin-bottom:5px; }
-.quiz-option {
-  display:block; width:100%; text-align:left; padding:12px 15px;
-  border-radius:10px; border:1px solid var(--border); background:var(--bg);
-  color:var(--text); margin:9px 0;
-}
-.quiz-option:hover { background:var(--panel2); }
-#quizFeedback { min-height:28px; color:var(--accent); }
-footer { text-align:center; color:var(--muted); padding:25px; font-size:12px; }
-@media(max-width:700px) {
-  header { padding:16px 5%; }
-  main { padding:20px 13px 40px; }
-  .hero { padding:23px; }
-  .content-grid { grid-template-columns:1fr; }
-  .tools { grid-template-columns:1fr; }
-  .section { padding:16px; }
-  .elements { grid-template-columns:repeat(3,minmax(0,1fr)); }
-}
+:root{--bg:#080d18;--panel:#101a2b;--line:#263650;--text:#edf4ff;--muted:#9eafc8;--accent:#8dc8ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,"Segoe UI",Arial,sans-serif}
+header{padding:28px 5%;border-bottom:1px solid var(--line);background:#0b1220}
+.brand{font-size:27px;font-weight:800;letter-spacing:5px}
+.brand span{color:var(--accent)}
+header p,.sub{color:var(--muted);line-height:1.6}
+nav{display:flex;gap:10px;flex-wrap:wrap;padding:15px 5%;border-bottom:1px solid var(--line)}
+button,input,select{font:inherit}
+nav button,.action{background:var(--panel);color:var(--text);border:1px solid var(--line);padding:10px 15px;border-radius:10px;cursor:pointer}
+nav button:hover,.action:hover{border-color:var(--accent)}
+main{max-width:1450px;margin:auto;padding:28px 4% 60px}
+h1{font-size:clamp(28px,5vw,44px);margin-bottom:8px}
+h2{margin-top:0}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}
+input,select{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:13px;min-width:0}
+#search{flex:1;min-width:220px}
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+.tag{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:6px 10px}
+.table-wrap{overflow-x:auto;padding-bottom:14px}
+.periodic{display:grid;grid-template-columns:repeat(18,minmax(55px,1fr));grid-template-rows:repeat(9,minmax(76px,auto));gap:5px;min-width:1080px}
+.element{min-height:76px;padding:6px 3px;border:1px solid var(--line);border-radius:8px;color:var(--text);cursor:pointer;text-align:center;transition:transform .15s,border-color .15s}
+.element:hover{transform:translateY(-3px);border-color:var(--accent)}
+.element .num{display:block;text-align:left;font-size:10px;color:var(--muted)}
+.element .sym{display:block;font-size:23px;font-weight:750;margin:2px}
+.element .name{display:block;font-size:9px;overflow-wrap:anywhere}
+.alkali{background:#30202a}.alkaline{background:#302a20}.transition{background:#1d2d42}.post{background:#1d3335}.metalloid{background:#283329}.nonmetal{background:#202e3c}.halogen{background:#292642}.noble{background:#302542}.lanth{background:#3a2b21}.act{background:#3a2630}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;margin-top:24px}
+.hidden{display:none!important}
+#detail{display:grid;grid-template-columns:110px 1fr;gap:20px;align-items:start}
+.big-symbol{font-size:60px;font-weight:800;color:var(--accent);text-align:center}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin-top:18px}
+.stat{padding:13px;border:1px solid var(--line);border-radius:10px;overflow-wrap:anywhere}
+.stat small{display:block;color:var(--muted);margin-bottom:6px}
+#quiz button{display:block;width:100%;text-align:left;margin:8px 0}
+#quiz button:disabled{cursor:default;opacity:.9}
+footer{padding:30px 15px;text-align:center;color:var(--muted);border-top:1px solid var(--line);line-height:1.6}
+.footer-brand{font-size:18px;letter-spacing:3px;font-weight:bold;color:var(--accent)}
+@media(max-width:600px){main{padding:22px 4%}.brand{font-size:22px}#detail{grid-template-columns:1fr}.big-symbol{text-align:left}}
 </style>
 </head>
 <body>
 <header>
-  <div class="brand">⚛ ATOMVERSE<small>EXPLORE · LEARN · DISCOVER</small></div>
-  <nav>
-    <button onclick="goTo('home')">Home</button>
-    <button onclick="goTo('periodic')">Elements</button>
-    <button onclick="goTo('explorer')">Atom Explorer</button>
-    <button onclick="goTo('quiz')">Quiz</button>
-  </nav>
+  <div class="brand">ATOM<span>VERSE</span></div>
+  <p>A quiet place to explore the building blocks of the universe.</p>
 </header>
 
-<main id="home">
-  <section class="hero">
-    <div class="eyebrow">A SMALL UNIVERSE OF KNOWLEDGE</div>
-    <h1>Explore the building<br>blocks of everything.</h1>
-    <p>From the smallest atom to the world around you, discover chemistry through interactive elements, simple explanations and experiments in learning.</p>
-    <button class="btn" onclick="goTo('periodic')">Explore the elements →</button>
-  </section>
+<nav aria-label="Main navigation">
+  <button onclick="showSection('home')">Periodic Table</button>
+  <button onclick="showSection('explorer')">Atom Explorer</button>
+  <button onclick="showSection('quiz')">Knowledge Quiz</button>
+</nav>
 
-  <section class="section" id="periodic">
-    <div class="section-head">
-      <h2>The Elements</h2>
-      <input class="search" id="search" placeholder="Search name, symbol or number..." oninput="renderElements()">
-    </div>
-    <p>Select any element below to explore its properties.</p>
-    <div class="elements" id="elements"></div>
-    <p id="count"></p>
-  </section>
-
-  <div class="content-grid" id="explorer">
-    <section class="section">
-      <div class="section-head"><h2>Atom Explorer</h2></div>
-      <div class="atom-wrap">
-        <div class="atom" aria-label="Illustrative animated atom">
-          <div class="spin"><div class="orbit"><i class="electron"></i></div></div>
-          <div class="spin reverse"><div class="orbit two"><i class="electron"></i></div></div>
-          <div class="spin"><div class="orbit three"><i class="electron"></i></div></div>
-          <div class="nucleus"></div>
-        </div>
-      </div>
-      <p>This animation is an illustration. Real atoms are quantum systems, not tiny planets orbiting along fixed paths.</p>
-    </section>
-    <section class="section" id="details">
-      <div class="eyebrow">SELECTED ELEMENT</div>
-      <div class="detail-symbol" id="symbol">C</div>
-      <h2 id="elementName">Carbon</h2>
-      <p id="category">Nonmetal</p>
-      <div class="facts">
-        <div class="fact"><small>Atomic number</small><strong id="number">6</strong></div>
-        <div class="fact"><small>Atomic mass</small><strong id="mass">12.011</strong></div>
-        <div class="fact"><small>Protons</small><strong id="protons">6</strong></div>
-        <div class="fact"><small>Electrons</small><strong id="electrons">6</strong></div>
-      </div>
-      <h3>About this element</h3>
-      <p id="description">Carbon is central to organic chemistry and is found in all known forms of life.</p>
-      <h3>Electron configuration</h3>
-      <p id="configuration">1s² 2s² 2p²</p>
-    </section>
+<main>
+<section id="home">
+  <h1>The Periodic Table</h1>
+  <p class="sub">Explore all 118 known chemical elements. Select any element to discover its properties.</p>
+  <div class="controls">
+    <input id="search" placeholder="Search name, symbol, or atomic number..." oninput="renderTable()" aria-label="Search elements">
+    <select id="filter" onchange="renderTable()" aria-label="Filter by category">
+      <option value="all">All categories</option>
+      <option value="alkali">Alkali metals</option>
+      <option value="alkaline">Alkaline earth metals</option>
+      <option value="transition">Transition metals</option>
+      <option value="post">Post-transition metals</option>
+      <option value="metalloid">Metalloids</option>
+      <option value="nonmetal">Other nonmetals</option>
+      <option value="halogen">Halogens</option>
+      <option value="noble">Noble gases</option>
+      <option value="lanth">Lanthanides</option>
+      <option value="act">Actinides</option>
+    </select>
   </div>
+  <div class="legend">
+    <span class="tag">Alkali metal</span>
+    <span class="tag">Alkaline earth</span>
+    <span class="tag">Transition metal</span>
+    <span class="tag">Post-transition</span>
+    <span class="tag">Metalloid</span>
+    <span class="tag">Nonmetal</span>
+    <span class="tag">Halogen</span>
+    <span class="tag">Noble gas</span>
+    <span class="tag">Lanthanide / Actinide</span>
+  </div>
+  <div class="table-wrap"><div id="table" class="periodic"></div></div>
+  <p class="sub" id="count" aria-live="polite"></p>
+  <div class="card" id="details">
+    <h2>Choose an element</h2>
+    <p class="sub">Click an element in the table to view its information.</p>
+  </div>
+</section>
 
-  <section class="section">
-    <div class="section-head"><h2>Explore & Learn</h2></div>
-    <div class="tools">
-      <div class="tool"><b>01 · Element Guide</b><p>Discover element symbols, atomic numbers and everyday uses.</p></div>
-      <div class="tool"><b>02 · Atomic Structure</b><p>Learn about protons, neutrons, electrons and electron shells.</p></div>
-      <div class="tool"><b>03 · Science Challenge</b><p>Test your chemistry knowledge with a quick quiz.</p></div>
+<section id="explorer" class="hidden">
+  <h1>Atom Explorer</h1>
+  <p class="sub">An educational illustration of a simplified atom. Real electron behaviour is more complex than this model.</p>
+  <div class="card">
+    <div class="controls">
+      <select id="atomSelect" onchange="drawAtom()" aria-label="Choose an atom"></select>
     </div>
-  </section>
+    <canvas id="atomCanvas" width="600" height="390" style="width:100%;max-width:600px;display:block;margin:auto"></canvas>
+    <p id="atomInfo" class="sub"></p>
+  </div>
+</section>
 
-  <section class="section" id="quiz">
-    <div class="eyebrow">KNOWLEDGE CHECK</div>
-    <h2>Science Quiz</h2>
-    <p id="question">Which element has the chemical symbol O?</p>
-    <div id="options"></div>
-    <p id="quizFeedback" aria-live="polite"></p>
-    <button class="btn" onclick="nextQuestion()">Next question →</button>
-    <p>Score: <strong id="score">0</strong></p>
-  </section>
+<section id="quiz" class="hidden">
+  <h1>Knowledge Quiz</h1>
+  <p class="sub">Test what you know about the elements.</p>
+  <div class="card" id="quizBox"></div>
+</section>
 </main>
 
-<footer>ATOMVERSE · Made for curious minds · Learn something new every day.</footer>
+<footer>
+  <div class="footer-brand">ATOMVERSE</div>
+  <p><strong>Designed &amp; Created by Abhijeet</strong></p>
+  <p>Built with curiosity, code, and a love for science.</p>
+  <p style="font-size:12px">© 2026 Abhijeet · Educational project</p>
+</footer>
 
 <script>
-const data = [
-[1,"H","Hydrogen",1.008,"Nonmetal","The lightest element. It is abundant in stars and is part of water.","1s¹"],
-[2,"He","Helium",4.0026,"Noble gas","A very light, unreactive gas used in balloons and scientific equipment.","1s²"],
-[3,"Li","Lithium",6.94,"Alkali metal","A soft metal widely used in rechargeable batteries.","1s² 2s¹"],
-[4,"Be","Beryllium",9.0122,"Alkaline earth metal","A lightweight metal used in specialized aerospace materials.","1s² 2s²"],
-[5,"B","Boron",10.81,"Metalloid","Used in borosilicate glass, detergents and some semiconductor materials.","1s² 2s² 2p¹"],
-[6,"C","Carbon",12.011,"Nonmetal","Carbon is central to organic chemistry and is found in all known forms of life.","1s² 2s² 2p²"],
-[7,"N","Nitrogen",14.007,"Nonmetal","Makes up most of Earth's atmosphere and is essential for living organisms.","1s² 2s² 2p³"],
-[8,"O","Oxygen",15.999,"Nonmetal","A major component of air and essential for aerobic respiration.","1s² 2s² 2p⁴"],
-[9,"F","Fluorine",18.998,"Halogen","A highly reactive element; fluoride compounds are used in dental care.","1s² 2s² 2p⁵"],
-[10,"Ne","Neon",20.180,"Noble gas","An unreactive gas known for its use in lighting.","1s² 2s² 2p⁶"],
-[11,"Na","Sodium",22.990,"Alkali metal","A reactive metal found in compounds such as table salt.","[Ne] 3s¹"],
-[12,"Mg","Magnesium",24.305,"Alkaline earth metal","A lightweight metal and an essential element in living organisms.","[Ne] 3s²"],
-[13,"Al","Aluminium",26.982,"Post-transition metal","A lightweight metal used in cans, transport and construction.","[Ne] 3s² 3p¹"],
-[14,"Si","Silicon",28.085,"Metalloid","An important semiconductor used in computer chips and solar cells.","[Ne] 3s² 3p²"],
-[15,"P","Phosphorus",30.974,"Nonmetal","Essential to DNA, bones and cellular energy systems.","[Ne] 3s² 3p³"],
-[16,"S","Sulfur",32.06,"Nonmetal","A yellow element used to produce sulfuric acid and other compounds.","[Ne] 3s² 3p⁴"],
-[17,"Cl","Chlorine",35.45,"Halogen","Its compounds are used to disinfect water and make many useful materials.","[Ne] 3s² 3p⁵"],
-[18,"Ar","Argon",39.948,"Noble gas","An unreactive gas used in lighting and welding.","[Ne] 3s² 3p⁶"],
-[19,"K","Potassium",39.098,"Alkali metal","An essential nutrient for nerves, muscles and plants.","[Ar] 4s¹"],
-[20,"Ca","Calcium",40.078,"Alkaline earth metal","Important for bones, teeth and many biological processes.","[Ar] 4s²"],
-[26,"Fe","Iron",55.845,"Transition metal","A major component of steel and essential to oxygen transport in blood.","[Ar] 3d⁶ 4s²"],
-[29,"Cu","Copper",63.546,"Transition metal","A highly useful electrical conductor found in wires and electronics.","[Ar] 3d¹⁰ 4s¹"],
-[47,"Ag","Silver",107.868,"Transition metal","A reflective metal used in jewelry, electronics and specialized applications.","[Kr] 4d¹⁰ 5s¹"],
-[79,"Au","Gold",196.967,"Transition metal","A corrosion-resistant metal used in jewelry and electronics.","[Xe] 4f¹⁴ 5d¹⁰ 6s¹"],
-[92,"U","Uranium",238.029,"Actinide","A heavy radioactive element used as fuel in some nuclear reactors.","[Rn] 5f³ 6d¹ 7s²"]
+const raw = `
+Hydrogen|H|1|1.008|nonmetal|1s1
+Helium|He|2|4.0026|noble|1s2
+Lithium|Li|3|6.94|alkali|[He] 2s1
+Beryllium|Be|4|9.0122|alkaline|[He] 2s2
+Boron|B|5|10.81|metalloid|[He] 2s2 2p1
+Carbon|C|6|12.011|nonmetal|[He] 2s2 2p2
+Nitrogen|N|7|14.007|nonmetal|[He] 2s2 2p3
+Oxygen|O|8|15.999|nonmetal|[He] 2s2 2p4
+Fluorine|F|9|18.998|halogen|[He] 2s2 2p5
+Neon|Ne|10|20.180|noble|[He] 2s2 2p6
+Sodium|Na|11|22.990|alkali|[Ne] 3s1
+Magnesium|Mg|12|24.305|alkaline|[Ne] 3s2
+Aluminium|Al|13|26.982|post|[Ne] 3s2 3p1
+Silicon|Si|14|28.085|metalloid|[Ne] 3s2 3p2
+Phosphorus|P|15|30.974|nonmetal|[Ne] 3s2 3p3
+Sulfur|S|16|32.06|nonmetal|[Ne] 3s2 3p4
+Chlorine|Cl|17|35.45|halogen|[Ne] 3s2 3p5
+Argon|Ar|18|39.948|noble|[Ne] 3s2 3p6
+Potassium|K|19|39.098|alkali|[Ar] 4s1
+Calcium|Ca|20|40.078|alkaline|[Ar] 4s2
+Scandium|Sc|21|44.956|transition|[Ar] 3d1 4s2
+Titanium|Ti|22|47.867|transition|[Ar] 3d2 4s2
+Vanadium|V|23|50.942|transition|[Ar] 3d3 4s2
+Chromium|Cr|24|51.996|transition|[Ar] 3d5 4s1
+Manganese|Mn|25|54.938|transition|[Ar] 3d5 4s2
+Iron|Fe|26|55.845|transition|[Ar] 3d6 4s2
+Cobalt|Co|27|58.933|transition|[Ar] 3d7 4s2
+Nickel|Ni|28|58.693|transition|[Ar] 3d8 4s2
+Copper|Cu|29|63.546|transition|[Ar] 3d10 4s1
+Zinc|Zn|30|65.38|transition|[Ar] 3d10 4s2
+Gallium|Ga|31|69.723|post|[Ar] 3d10 4s2 4p1
+Germanium|Ge|32|72.630|metalloid|[Ar] 3d10 4s2 4p2
+Arsenic|As|33|74.922|metalloid|[Ar] 3d10 4s2 4p3
+Selenium|Se|34|78.971|nonmetal|[Ar] 3d10 4s2 4p4
+Bromine|Br|35|79.904|halogen|[Ar] 3d10 4s2 4p5
+Krypton|Kr|36|83.798|noble|[Ar] 3d10 4s2 4p6
+Rubidium|Rb|37|85.468|alkali|[Kr] 5s1
+Strontium|Sr|38|87.62|alkaline|[Kr] 5s2
+Yttrium|Y|39|88.906|transition|[Kr] 4d1 5s2
+Zirconium|Zr|40|91.224|transition|[Kr] 4d2 5s2
+Niobium|Nb|41|92.906|transition|[Kr] 4d4 5s1
+Molybdenum|Mo|42|95.95|transition|[Kr] 4d5 5s1
+Technetium|Tc|43|98|transition|[Kr] 4d5 5s2
+Ruthenium|Ru|44|101.07|transition|[Kr] 4d7 5s1
+Rhodium|Rh|45|102.906|transition|[Kr] 4d8 5s1
+Palladium|Pd|46|106.42|transition|[Kr] 4d10
+Silver|Ag|47|107.868|transition|[Kr] 4d10 5s1
+Cadmium|Cd|48|112.414|transition|[Kr] 4d10 5s2
+Indium|In|49|114.818|post|[Kr] 4d10 5s2 5p1
+Tin|Sn|50|118.710|post|[Kr] 4d10 5s2 5p2
+Antimony|Sb|51|121.760|metalloid|[Kr] 4d10 5s2 5p3
+Tellurium|Te|52|127.60|metalloid|[Kr] 4d10 5s2 5p4
+Iodine|I|53|126.904|halogen|[Kr] 4d10 5s2 5p5
+Xenon|Xe|54|131.293|noble|[Kr] 4d10 5s2 5p6
+Caesium|Cs|55|132.905|alkali|[Xe] 6s1
+Barium|Ba|56|137.327|alkaline|[Xe] 6s2
+Lanthanum|La|57|138.905|lanth|[Xe] 5d1 6s2
+Cerium|Ce|58|140.116|lanth|[Xe] 4f1 5d1 6s2
+Praseodymium|Pr|59|140.908|lanth|[Xe] 4f3 6s2
+Neodymium|Nd|60|144.242|lanth|[Xe] 4f4 6s2
+Promethium|Pm|61|145|lanth|[Xe] 4f5 6s2
+Samarium|Sm|62|150.36|lanth|[Xe] 4f6 6s2
+Europium|Eu|63|151.964|lanth|[Xe] 4f7 6s2
+Gadolinium|Gd|64|157.25|lanth|[Xe] 4f7 5d1 6s2
+Terbium|Tb|65|158.925|lanth|[Xe] 4f9 6s2
+Dysprosium|Dy|66|162.500|lanth|[Xe] 4f10 6s2
+Holmium|Ho|67|164.930|lanth|[Xe] 4f11 6s2
+Erbium|Er|68|167.259|lanth|[Xe] 4f12 6s2
+Thulium|Tm|69|168.934|lanth|[Xe] 4f13 6s2
+Ytterbium|Yb|70|173.045|lanth|[Xe] 4f14 6s2
+Lutetium|Lu|71|174.967|lanth|[Xe] 4f14 5d1 6s2
+Hafnium|Hf|72|178.49|transition|[Xe] 4f14 5d2 6s2
+Tantalum|Ta|73|180.948|transition|[Xe] 4f14 5d3 6s2
+Tungsten|W|74|183.84|transition|[Xe] 4f14 5d4 6s2
+Rhenium|Re|75|186.207|transition|[Xe] 4f14 5d5 6s2
+Osmium|Os|76|190.23|transition|[Xe] 4f14 5d6 6s2
+Iridium|Ir|77|192.217|transition|[Xe] 4f14 5d7 6s2
+Platinum|Pt|78|195.084|transition|[Xe] 4f14 5d9 6s1
+Gold|Au|79|196.967|transition|[Xe] 4f14 5d10 6s1
+Mercury|Hg|80|200.592|transition|[Xe] 4f14 5d10 6s2
+Thallium|Tl|81|204.38|post|[Xe] 4f14 5d10 6s2 6p1
+Lead|Pb|82|207.2|post|[Xe] 4f14 5d10 6s2 6p2
+Bismuth|Bi|83|208.980|post|[Xe] 4f14 5d10 6s2 6p3
+Polonium|Po|84|209|post|[Xe] 4f14 5d10 6s2 6p4
+Astatine|At|85|210|halogen|[Xe] 4f14 5d10 6s2 6p5
+Radon|Rn|86|222|noble|[Xe] 4f14 5d10 6s2 6p6
+Francium|Fr|87|223|alkali|[Rn] 7s1
+Radium|Ra|88|226|alkaline|[Rn] 7s2
+Actinium|Ac|89|227|act|[Rn] 6d1 7s2
+Thorium|Th|90|232.038|act|[Rn] 6d2 7s2
+Protactinium|Pa|91|231.036|act|[Rn] 5f2 6d1 7s2
+Uranium|U|92|238.029|act|[Rn] 5f3 6d1 7s2
+Neptunium|Np|93|237|act|[Rn] 5f4 6d1 7s2
+Plutonium|Pu|94|244|act|[Rn] 5f6 7s2
+Americium|Am|95|243|act|[Rn] 5f7 7s2
+Curium|Cm|96|247|act|[Rn] 5f7 6d1 7s2
+Berkelium|Bk|97|247|act|[Rn] 5f9 7s2
+Californium|Cf|98|251|act|[Rn] 5f10 7s2
+Einsteinium|Es|99|252|act|[Rn] 5f11 7s2
+Fermium|Fm|100|257|act|[Rn] 5f12 7s2
+Mendelevium|Md|101|258|act|[Rn] 5f13 7s2
+Nobelium|No|102|259|act|[Rn] 5f14 7s2
+Lawrencium|Lr|103|266|act|[Rn] 5f14 7s2 7p1
+Rutherfordium|Rf|104|267|transition|[Rn] 5f14 6d2 7s2
+Dubnium|Db|105|268|transition|[Rn] 5f14 6d3 7s2
+Seaborgium|Sg|106|269|transition|[Rn] 5f14 6d4 7s2
+Bohrium|Bh|107|270|transition|[Rn] 5f14 6d5 7s2
+Hassium|Hs|108|277|transition|[Rn] 5f14 6d6 7s2
+Meitnerium|Mt|109|278|transition|[Rn] 5f14 6d7 7s2
+Darmstadtium|Ds|110|281|transition|[Rn] 5f14 6d8 7s2
+Roentgenium|Rg|111|282|transition|[Rn] 5f14 6d9 7s2
+Copernicium|Cn|112|285|transition|[Rn] 5f14 6d10 7s2
+Nihonium|Nh|113|286|post|[Rn] 5f14 6d10 7s2 7p1
+Flerovium|Fl|114|289|post|[Rn] 5f14 6d10 7s2 7p2
+Moscovium|Mc|115|290|post|[Rn] 5f14 6d10 7s2 7p3
+Livermorium|Lv|116|293|post|[Rn] 5f14 6d10 7s2 7p4
+Tennessine|Ts|117|294|halogen|[Rn] 5f14 6d10 7s2 7p5
+Oganesson|Og|118|294|noble|[Rn] 5f14 6d10 7s2 7p6
+`.trim();
+
+const elements=raw.split("\n").map(line=>{
+ const [name,symbol,n,mass,category,config]=line.split("|");
+ return {name,symbol,n:+n,mass,category,config};
+});
+
+const positions={
+1:[1,1],2:[1,18],3:[2,1],4:[2,2],5:[2,13],6:[2,14],7:[2,15],8:[2,16],9:[2,17],10:[2,18],
+11:[3,1],12:[3,2],13:[3,13],14:[3,14],15:[3,15],16:[3,16],17:[3,17],18:[3,18],
+19:[4,1],20:[4,2],21:[4,3],22:[4,4],23:[4,5],24:[4,6],25:[4,7],26:[4,8],27:[4,9],28:[4,10],29:[4,11],30:[4,12],31:[4,13],32:[4,14],33:[4,15],34:[4,16],35:[4,17],36:[4,18],
+37:[5,1],38:[5,2],39:[5,3],40:[5,4],41:[5,5],42:[5,6],43:[5,7],44:[5,8],45:[5,9],46:[5,10],47:[5,11],48:[5,12],49:[5,13],50:[5,14],51:[5,15],52:[5,16],53:[5,17],54:[5,18],
+55:[6,1],56:[6,2],72:[6,4],73:[6,5],74:[6,6],75:[6,7],76:[6,8],77:[6,9],78:[6,10],79:[6,11],80:[6,12],81:[6,13],82:[6,14],83:[6,15],84:[6,16],85:[6,17],86:[6,18],
+87:[7,1],88:[7,2],104:[7,4],105:[7,5],106:[7,6],107:[7,7],108:[7,8],109:[7,9],110:[7,10],111:[7,11],112:[7,12],113:[7,13],114:[7,14],115:[7,15],116:[7,16],117:[7,17],118:[7,18]
+};
+elements.filter(e=>e.n>=57&&e.n<=71).forEach((e,i)=>positions[e.n]=[8,i+4]);
+elements.filter(e=>e.n>=89&&e.n<=103).forEach((e,i)=>positions[e.n]=[9,i+4]);
+
+const categoryNames={alkali:"Alkali metal",alkaline:"Alkaline earth metal",transition:"Transition metal",post:"Post-transition metal",metalloid:"Metalloid",nonmetal:"Other nonmetal",halogen:"Halogen",noble:"Noble gas",lanth:"Lanthanide",act:"Actinide"};
+
+function renderTable(){
+ const q=document.getElementById("search").value.trim().toLowerCase();
+ const filter=document.getElementById("filter").value;
+ const table=document.getElementById("table");table.innerHTML="";
+ let visible=0;
+ elements.forEach(e=>{
+  const [r,c]=positions[e.n]||[0,0];
+  const matches=(!q||e.name.toLowerCase().includes(q)||e.symbol.toLowerCase().includes(q)||String(e.n)===q)&&(filter==="all"||e.category===filter);
+  const cell=document.createElement("button");
+  cell.className="element "+e.category;
+  cell.style.gridRow=r;cell.style.gridColumn=c;
+  cell.innerHTML=`<span class="num">${e.n}</span><span class="sym">${e.symbol}</span><span class="name">${e.name}</span>`;
+  cell.title=`${e.name} (${e.symbol})`;
+  cell.onclick=()=>showElement(e);
+  if(!matches)cell.classList.add("hidden");else visible++;
+  table.appendChild(cell);
+ });
+ document.getElementById("count").textContent=`Showing ${visible} of ${elements.length} elements. Scroll horizontally to see the full table.`;
+}
+
+function showElement(e){
+ document.getElementById("details").innerHTML=`
+ <div id="detail">
+  <div class="big-symbol">${e.symbol}<div style="font-size:14px;color:var(--muted)">${e.n}</div></div>
+  <div><h2>${e.name}</h2><p class="sub">${categoryNames[e.category]}</p>
+   <div class="stats">
+    <div class="stat"><small>Atomic number</small><strong>${e.n}</strong></div>
+    <div class="stat"><small>Atomic mass</small><strong>${e.mass} u</strong></div>
+    <div class="stat"><small>Category</small><strong>${categoryNames[e.category]}</strong></div>
+    <div class="stat"><small>Electron configuration</small><strong>${e.config}</strong></div>
+   </div>
+  </div>
+ </div>`;
+ document.getElementById("atomSelect").value=String(e.n);
+ drawAtom();
+}
+
+function showSection(id){
+ ["home","explorer","quiz"].forEach(s=>document.getElementById(s).classList.toggle("hidden",s!==id));
+ if(id==="explorer")drawAtom();
+ if(id==="quiz"&&!quizStarted)startQuiz();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+const atomSelect=document.getElementById("atomSelect");
+elements.forEach(e=>{
+ const o=document.createElement("option");
+ o.value=e.n;o.textContent=`${e.n}. ${e.name} (${e.symbol})`;
+ atomSelect.appendChild(o);
+});
+
+function drawAtom(){
+ const e=elements.find(x=>x.n===Number(atomSelect.value))||elements[0];
+ const canvas=document.getElementById("atomCanvas"),ctx=canvas.getContext("2d");
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.fillStyle="#080d18";ctx.fillRect(0,0,600,390);
+ const cx=300,cy=190;
+ let left=e.n,cap=2,shell=0;const shells=[];
+ while(left>0&&shell<7){
+  const amount=Math.min(left,cap);shells.push(amount);left-=amount;shell++;
+  cap=shell===1?8:shell===2?18:shell===3?32:32;
+ }
+ shells.forEach((amount,i)=>{
+  const radius=38+i*32;
+  ctx.beginPath();ctx.arc(cx,cy,radius,0,Math.PI*2);
+  ctx.strokeStyle="#344660";ctx.lineWidth=1;ctx.stroke();
+  for(let j=0;j<amount;j++){
+   const angle=(Math.PI*2*j/amount)+(i%2)*.3;
+   const x=cx+radius*Math.cos(angle),y=cy+radius*Math.sin(angle);
+   ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);
+   ctx.fillStyle="#8dc8ff";ctx.fill();
+  }
+ });
+ ctx.beginPath();ctx.arc(cx,cy,19,0,Math.PI*2);ctx.fillStyle="#d6eaff";ctx.fill();
+ ctx.fillStyle="#101a2b";ctx.font="bold 11px Arial";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(e.symbol,cx,cy);
+ document.getElementById("atomInfo").textContent=`${e.name}: ${e.n} protons in a neutral atom and approximately ${e.n} electrons. This shell drawing is a simplified learning illustration, not a precise model of electron orbitals.`;
+}
+
+const questions=[
+ {q:"What is the chemical symbol for Gold?",opts:["Go","Gd","Au","Ag"],a:"Au"},
+ {q:"Which element has atomic number 1?",opts:["Helium","Hydrogen","Oxygen","Carbon"],a:"Hydrogen"},
+ {q:"Which gas makes up most of Earth's atmosphere?",opts:["Oxygen","Nitrogen","Argon","Carbon"],a:"Nitrogen"},
+ {q:"What is the chemical symbol for Sodium?",opts:["S","So","Na","Sd"],a:"Na"},
+ {q:"Which element has atomic number 118?",opts:["Oganesson","Tennessine","Livermorium","Nihonium"],a:"Oganesson"},
+ {q:"Which element has the symbol Fe?",opts:["Fluorine","Iron","Francium","Fermium"],a:"Iron"},
+ {q:"Which category is Neon in?",opts:["Alkali metal","Halogen","Noble gas","Metalloid"],a:"Noble gas"},
+ {q:"What is the symbol for Oxygen?",opts:["Ox","O","Og","On"],a:"O"}
 ];
 
-let selected = 5;
-let score = 0;
-let qIndex = 0;
-const questions = [
-{q:"Which element has the chemical symbol O?",a:["Gold","Oxygen","Osmium"],correct:1},
-{q:"What is the atomic number of Hydrogen?",a:["1","2","8"],correct:0},
-{q:"Which element is commonly used in electrical wires?",a:["Helium","Copper","Neon"],correct:1},
-{q:"What particle has a negative electric charge?",a:["Proton","Neutron","Electron"],correct:2},
-{q:"Which gas makes up most of Earth's atmosphere?",a:["Oxygen","Nitrogen","Carbon dioxide"],correct:1}
-];
+let quizStarted=false,quizIndex=0,quizScore=0,quizOrder=[];
 
-function renderElements() {
-  const query = document.getElementById("search").value.toLowerCase().trim();
-  const filtered = data.filter(e => e[1].toLowerCase().includes(query) ||
-    e[2].toLowerCase().includes(query) || String(e[0]).includes(query));
-  document.getElementById("elements").innerHTML = filtered.map(e => `
-    <button class="element ${e[0]===selected?'selected':''}" onclick="selectElement(${e[0]})">
-      <span class="num">${e[0]}</span><span class="symbol">${e[1]}</span>
-      <span class="name">${e[2]}</span>
-    </button>`).join("");
-  document.getElementById("count").textContent =
-    `${filtered.length} elements shown · This starter edition includes ${data.length} selected elements.`;
+function startQuiz(){
+ quizStarted=true;quizIndex=0;quizScore=0;
+ quizOrder=[...questions].sort(()=>Math.random()-.5);
+ renderQuestion();
 }
-function selectElement(number) {
-  selected = number;
-  const e = data.find(item => item[0] === number);
-  if (!e) return;
-  document.getElementById("symbol").textContent = e[1];
-  document.getElementById("elementName").textContent = e[2];
-  document.getElementById("category").textContent = e[4];
-  document.getElementById("number").textContent = e[0];
-  document.getElementById("mass").textContent = e[3];
-  document.getElementById("protons").textContent = e[0];
-  document.getElementById("electrons").textContent = e[0];
-  document.getElementById("description").textContent = e[5];
-  document.getElementById("configuration").textContent = e[6];
-  renderElements();
+
+function renderQuestion(){
+ const box=document.getElementById("quizBox");
+ if(quizIndex>=quizOrder.length){
+  box.innerHTML=`<h2>Quiz complete!</h2><p>You scored <strong>${quizScore} / ${quizOrder.length}</strong>.</p><button class="action" onclick="startQuiz()">Try again</button>`;
+  return;
+ }
+ const item=quizOrder[quizIndex];
+ box.innerHTML=`<p class="sub">Question ${quizIndex+1} of ${quizOrder.length} · Score: ${quizScore}</p><h2>${item.q}</h2><div id="options"></div><p id="feedback" class="sub" aria-live="polite"></p>`;
+ const options=document.getElementById("options");
+ item.opts.forEach(option=>{
+  const b=document.createElement("button");b.className="action";b.textContent=option;
+  b.onclick=()=>answerQuestion(option,item);options.appendChild(b);
+ });
 }
-function goTo(id) { document.getElementById(id).scrollIntoView({behavior:"smooth"}); }
-function showQuestion() {
-  const q = questions[qIndex % questions.length];
-  document.getElementById("question").textContent = q.q;
-  document.getElementById("quizFeedback").textContent = "";
-  document.getElementById("options").innerHTML = q.a.map((answer,i) =>
-    `<button class="quiz-option" onclick="answerQuestion(${i})">${answer}</button>`).join("");
+
+function answerQuestion(option,item){
+ const buttons=document.querySelectorAll("#options button");
+ buttons.forEach(b=>b.disabled=true);
+ const feedback=document.getElementById("feedback");
+ if(option===item.a){quizScore++;feedback.textContent="Correct!";}
+ else{feedback.textContent=`Not quite. Correct answer: ${item.a}.`;}
+ const next=document.createElement("button");
+ next.className="action";
+ next.textContent=quizIndex===quizOrder.length-1?"See results":"Next question";
+ next.onclick=()=>{quizIndex++;renderQuestion();};
+ document.getElementById("options").appendChild(next);
 }
-function answerQuestion(i) {
-  const q = questions[qIndex % questions.length];
-  const feedback = document.getElementById("quizFeedback");
-  if (document.getElementById("options").dataset.answered === "yes") return;
-  document.getElementById("options").dataset.answered = "yes";
-  if (i === q.correct) { score++; feedback.textContent = "Correct! Well done."; }
-  else { feedback.textContent = "Not quite. The answer is " + q.a[q.correct] + "."; }
-  document.getElementById("score").textContent = score;
-}
-function nextQuestion() {
-  qIndex++;
-  document.getElementById("options").dataset.answered = "no";
-  showQuestion();
-}
-renderElements();
-selectElement(6);
-showQuestion();
+
+renderTable();
+showElement(elements[0]);
+drawAtom();
 </script>
 </body>
 </html>
