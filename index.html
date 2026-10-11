@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATOMVERSE — Explore Chemistry</title>
+<style>
+:root {
+  --bg: #0e1724;
+  --panel: #152235;
+  --panel2: #1b2a3e;
+  --text: #e6edf5;
+  --muted: #9aabc0;
+  --accent: #a8c7e8;
+  --border: #2a3b50;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  line-height: 1.6;
+}
+button, input { font: inherit; }
+button { cursor: pointer; }
+header {
+  padding: 20px 6%;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.brand { font-size: 23px; letter-spacing: 5px; font-weight: 650; }
+.brand small { display:block; font-size:9px; letter-spacing:3px; color:var(--muted); }
+nav { display:flex; gap:8px; flex-wrap:wrap; }
+nav button, .btn {
+  border:1px solid var(--border); background:var(--panel);
+  color:var(--text); padding:9px 14px; border-radius:10px;
+}
+nav button:hover, .btn:hover { background:var(--panel2); }
+main { max-width:1200px; margin:auto; padding:30px 20px 60px; }
+.hero {
+  padding:35px; border:1px solid var(--border); border-radius:20px;
+  background:linear-gradient(120deg,#1a2b40,#111c2b 70%);
+  margin-bottom:24px;
+}
+.eyebrow { color:var(--accent); letter-spacing:3px; font-size:11px; }
+h1 { font-size:clamp(32px,5vw,54px); line-height:1.12; margin:14px 0; }
+p { color:var(--muted); }
+.hero p { max-width:600px; }
+.section {
+  background:var(--panel); border:1px solid var(--border);
+  border-radius:17px; padding:23px; margin:22px 0;
+}
+.section-head {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; flex-wrap:wrap; margin-bottom:18px;
+}
+h2 { font-size:22px; margin:0; }
+.search {
+  background:var(--bg); color:var(--text); border:1px solid var(--border);
+  padding:11px 14px; border-radius:10px; width:min(100%,260px);
+}
+.elements {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(90px,1fr)); gap:9px;
+}
+.element {
+  min-height:105px; border:1px solid var(--border); border-radius:11px;
+  background:#1b2b3e; color:var(--text); padding:10px;
+  text-align:left; transition:transform .15s,border-color .15s;
+}
+.element:hover { transform:translateY(-2px); border-color:#8ba9c8; }
+.element .num { display:block; font-size:11px; color:var(--muted); }
+.element .symbol { display:block; font-size:26px; font-weight:650; }
+.element .name { display:block; font-size:12px; overflow-wrap:anywhere; }
+.element.selected { border-color:var(--accent); background:#263b52; }
+.content-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+.atom-wrap {
+  min-height:275px; display:grid; place-items:center; overflow:hidden;
+  background:#111c2a; border-radius:14px;
+}
+.atom { width:210px; height:210px; position:relative; }
+.orbit {
+  position:absolute; inset:30px 0; border:1px solid #6d91b2;
+  border-radius:50%; transform:rotate(35deg);
+}
+.orbit.two { transform:rotate(-35deg); inset:30px 0; }
+.orbit.three { transform:rotate(90deg); inset:30px 0; }
+.nucleus {
+  position:absolute; width:48px; height:48px; top:81px; left:81px;
+  border-radius:50%; background:#769cbd;
+  box-shadow:inset -8px -8px 12px #304c68, 0 0 18px #769cbd33;
+}
+.electron {
+  width:10px; height:10px; border-radius:50%; background:#b8d8f3;
+  position:absolute; top:-5px; left:calc(50% - 5px);
+  box-shadow:0 0 8px #a8c7e855;
+}
+.spin { position:absolute; inset:0; animation:spin 7s linear infinite; }
+.spin.reverse { animation-direction:reverse; animation-duration:10s; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.facts { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; }
+.fact { background:var(--panel2); border-radius:10px; padding:13px; }
+.fact small { display:block; color:var(--muted); }
+.fact strong { font-size:19px; }
+.detail-symbol { font-size:54px; line-height:1.2; color:var(--accent); }
+.tools { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.tool {
+  border:1px solid var(--border); border-radius:12px; padding:18px;
+  background:#18263a;
+}
+.tool b { display:block; margin-bottom:5px; }
+.quiz-option {
+  display:block; width:100%; text-align:left; padding:12px 15px;
+  border-radius:10px; border:1px solid var(--border); background:var(--bg);
+  color:var(--text); margin:9px 0;
+}
+.quiz-option:hover { background:var(--panel2); }
+#quizFeedback { min-height:28px; color:var(--accent); }
+footer { text-align:center; color:var(--muted); padding:25px; font-size:12px; }
+@media(max-width:700px) {
+  header { padding:16px 5%; }
+  main { padding:20px 13px 40px; }
+  .hero { padding:23px; }
+  .content-grid { grid-template-columns:1fr; }
+  .tools { grid-template-columns:1fr; }
+  .section { padding:16px; }
+  .elements { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">⚛ ATOMVERSE<small>EXPLORE · LEARN · DISCOVER</small></div>
+  <nav>
+    <button onclick="goTo('home')">Home</button>
+    <button onclick="goTo('periodic')">Elements</button>
+    <button onclick="goTo('explorer')">Atom Explorer</button>
+    <button onclick="goTo('quiz')">Quiz</button>
+  </nav>
+</header>
+
+<main id="home">
+  <section class="hero">
+    <div class="eyebrow">A SMALL UNIVERSE OF KNOWLEDGE</div>
+    <h1>Explore the building<br>blocks of everything.</h1>
+    <p>From the smallest atom to the world around you, discover chemistry through interactive elements, simple explanations and experiments in learning.</p>
+    <button class="btn" onclick="goTo('periodic')">Explore the elements →</button>
+  </section>
+
+  <section class="section" id="periodic">
+    <div class="section-head">
+      <h2>The Elements</h2>
+      <input class="search" id="search" placeholder="Search name, symbol or number..." oninput="renderElements()">
+    </div>
+    <p>Select any element below to explore its properties.</p>
+    <div class="elements" id="elements"></div>
+    <p id="count"></p>
+  </section>
+
+  <div class="content-grid" id="explorer">
+    <section class="section">
+      <div class="section-head"><h2>Atom Explorer</h2></div>
+      <div class="atom-wrap">
+        <div class="atom" aria-label="Illustrative animated atom">
+          <div class="spin"><div class="orbit"><i class="electron"></i></div></div>
+          <div class="spin reverse"><div class="orbit two"><i class="electron"></i></div></div>
+          <div class="spin"><div class="orbit three"><i class="electron"></i></div></div>
+          <div class="nucleus"></div>
+        </div>
+      </div>
+      <p>This animation is an illustration. Real atoms are quantum systems, not tiny planets orbiting along fixed paths.</p>
+    </section>
+    <section class="section" id="details">
+      <div class="eyebrow">SELECTED ELEMENT</div>
+      <div class="detail-symbol" id="symbol">C</div>
+      <h2 id="elementName">Carbon</h2>
+      <p id="category">Nonmetal</p>
+      <div class="facts">
+        <div class="fact"><small>Atomic number</small><strong id="number">6</strong></div>
+        <div class="fact"><small>Atomic mass</small><strong id="mass">12.011</strong></div>
+        <div class="fact"><small>Protons</small><strong id="protons">6</strong></div>
+        <div class="fact"><small>Electrons</small><strong id="electrons">6</strong></div>
+      </div>
+      <h3>About this element</h3>
+      <p id="description">Carbon is central to organic chemistry and is found in all known forms of life.</p>
+      <h3>Electron configuration</h3>
+      <p id="configuration">1s² 2s² 2p²</p>
+    </section>
+  </div>
+
+  <section class="section">
+    <div class="section-head"><h2>Explore & Learn</h2></div>
+    <div class="tools">
+      <div class="tool"><b>01 · Element Guide</b><p>Discover element symbols, atomic numbers and everyday uses.</p></div>
+      <div class="tool"><b>02 · Atomic Structure</b><p>Learn about protons, neutrons, electrons and electron shells.</p></div>
+      <div class="tool"><b>03 · Science Challenge</b><p>Test your chemistry knowledge with a quick quiz.</p></div>
+    </div>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="eyebrow">KNOWLEDGE CHECK</div>
+    <h2>Science Quiz</h2>
+    <p id="question">Which element has the chemical symbol O?</p>
+    <div id="options"></div>
+    <p id="quizFeedback" aria-live="polite"></p>
+    <button class="btn" onclick="nextQuestion()">Next question →</button>
+    <p>Score: <strong id="score">0</strong></p>
+  </section>
+</main>
+
+<footer>ATOMVERSE · Made for curious minds · Learn something new every day.</footer>
+
+<script>
+const data = [
+[1,"H","Hydrogen",1.008,"Nonmetal","The lightest element. It is abundant in stars and is part of water.","1s¹"],
+[2,"He","Helium",4.0026,"Noble gas","A very light, unreactive gas used in balloons and scientific equipment.","1s²"],
+[3,"Li","Lithium",6.94,"Alkali metal","A soft metal widely used in rechargeable batteries.","1s² 2s¹"],
+[4,"Be","Beryllium",9.0122,"Alkaline earth metal","A lightweight metal used in specialized aerospace materials.","1s² 2s²"],
+[5,"B","Boron",10.81,"Metalloid","Used in borosilicate glass, detergents and some semiconductor materials.","1s² 2s² 2p¹"],
+[6,"C","Carbon",12.011,"Nonmetal","Carbon is central to organic chemistry and is found in all known forms of life.","1s² 2s² 2p²"],
+[7,"N","Nitrogen",14.007,"Nonmetal","Makes up most of Earth's atmosphere and is essential for living organisms.","1s² 2s² 2p³"],
+[8,"O","Oxygen",15.999,"Nonmetal","A major component of air and essential for aerobic respiration.","1s² 2s² 2p⁴"],
+[9,"F","Fluorine",18.998,"Halogen","A highly reactive element; fluoride compounds are used in dental care.","1s² 2s² 2p⁵"],
+[10,"Ne","Neon",20.180,"Noble gas","An unreactive gas known for its use in lighting.","1s² 2s² 2p⁶"],
+[11,"Na","Sodium",22.990,"Alkali metal","A reactive metal found in compounds such as table salt.","[Ne] 3s¹"],
+[12,"Mg","Magnesium",24.305,"Alkaline earth metal","A lightweight metal and an essential element in living organisms.","[Ne] 3s²"],
+[13,"Al","Aluminium",26.982,"Post-transition metal","A lightweight metal used in cans, transport and construction.","[Ne] 3s² 3p¹"],
+[14,"Si","Silicon",28.085,"Metalloid","An important semiconductor used in computer chips and solar cells.","[Ne] 3s² 3p²"],
+[15,"P","Phosphorus",30.974,"Nonmetal","Essential to DNA, bones and cellular energy systems.","[Ne] 3s² 3p³"],
+[16,"S","Sulfur",32.06,"Nonmetal","A yellow element used to produce sulfuric acid and other compounds.","[Ne] 3s² 3p⁴"],
+[17,"Cl","Chlorine",35.45,"Halogen","Its compounds are used to disinfect water and make many useful materials.","[Ne] 3s² 3p⁵"],
+[18,"Ar","Argon",39.948,"Noble gas","An unreactive gas used in lighting and welding.","[Ne] 3s² 3p⁶"],
+[19,"K","Potassium",39.098,"Alkali metal","An essential nutrient for nerves, muscles and plants.","[Ar] 4s¹"],
+[20,"Ca","Calcium",40.078,"Alkaline earth metal","Important for bones, teeth and many biological processes.","[Ar] 4s²"],
+[26,"Fe","Iron",55.845,"Transition metal","A major component of steel and essential to oxygen transport in blood.","[Ar] 3d⁶ 4s²"],
+[29,"Cu","Copper",63.546,"Transition metal","A highly useful electrical conductor found in wires and electronics.","[Ar] 3d¹⁰ 4s¹"],
+[47,"Ag","Silver",107.868,"Transition metal","A reflective metal used in jewelry, electronics and specialized applications.","[Kr] 4d¹⁰ 5s¹"],
+[79,"Au","Gold",196.967,"Transition metal","A corrosion-resistant metal used in jewelry and electronics.","[Xe] 4f¹⁴ 5d¹⁰ 6s¹"],
+[92,"U","Uranium",238.029,"Actinide","A heavy radioactive element used as fuel in some nuclear reactors.","[Rn] 5f³ 6d¹ 7s²"]
+];
+
+let selected = 5;
+let score = 0;
+let qIndex = 0;
+const questions = [
+{q:"Which element has the chemical symbol O?",a:["Gold","Oxygen","Osmium"],correct:1},
+{q:"What is the atomic number of Hydrogen?",a:["1","2","8"],correct:0},
+{q:"Which element is commonly used in electrical wires?",a:["Helium","Copper","Neon"],correct:1},
+{q:"What particle has a negative electric charge?",a:["Proton","Neutron","Electron"],correct:2},
+{q:"Which gas makes up most of Earth's atmosphere?",a:["Oxygen","Nitrogen","Carbon dioxide"],correct:1}
+];
+
+function renderElements() {
+  const query = document.getElementById("search").value.toLowerCase().trim();
+  const filtered = data.filter(e => e[1].toLowerCase().includes(query) ||
+    e[2].toLowerCase().includes(query) || String(e[0]).includes(query));
+  document.getElementById("elements").innerHTML = filtered.map(e => `
+    <button class="element ${e[0]===selected?'selected':''}" onclick="selectElement(${e[0]})">
+      <span class="num">${e[0]}</span><span class="symbol">${e[1]}</span>
+      <span class="name">${e[2]}</span>
+    </button>`).join("");
+  document.getElementById("count").textContent =
+    `${filtered.length} elements shown · This starter edition includes ${data.length} selected elements.`;
+}
+function selectElement(number) {
+  selected = number;
+  const e = data.find(item => item[0] === number);
+  if (!e) return;
+  document.getElementById("symbol").textContent = e[1];
+  document.getElementById("elementName").textContent = e[2];
+  document.getElementById("category").textContent = e[4];
+  document.getElementById("number").textContent = e[0];
+  document.getElementById("mass").textContent = e[3];
+  document.getElementById("protons").textContent = e[0];
+  document.getElementById("electrons").textContent = e[0];
+  document.getElementById("description").textContent = e[5];
+  document.getElementById("configuration").textContent = e[6];
+  renderElements();
+}
+function goTo(id) { document.getElementById(id).scrollIntoView({behavior:"smooth"}); }
+function showQuestion() {
+  const q = questions[qIndex % questions.length];
+  document.getElementById("question").textContent = q.q;
+  document.getElementById("quizFeedback").textContent = "";
+  document.getElementById("options").innerHTML = q.a.map((answer,i) =>
+    `<button class="quiz-option" onclick="answerQuestion(${i})">${answer}</button>`).join("");
+}
+function answerQuestion(i) {
+  const q = questions[qIndex % questions.length];
+  const feedback = document.getElementById("quizFeedback");
+  if (document.getElementById("options").dataset.answered === "yes") return;
+  document.getElementById("options").dataset.answered = "yes";
+  if (i === q.correct) { score++; feedback.textContent = "Correct! Well done."; }
+  else { feedback.textContent = "Not quite. The answer is " + q.a[q.correct] + "."; }
+  document.getElementById("score").textContent = score;
+}
+function nextQuestion() {
+  qIndex++;
+  document.getElementById("options").dataset.answered = "no";
+  showQuestion();
+}
+renderElements();
+selectElement(6);
+showQuestion();
+</script>
+</body>
+</html>
